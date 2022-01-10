@@ -130,3 +130,9 @@ retStatus static _dac_stop_start_channel(anaOutputs an_output_name,
 
 }
 
+uint32_t lin_dac_no_scaling_no_corrections(uint32_t voltage_value) {
+
+	return voltage_value * 330 / 4094;
+
+}
+

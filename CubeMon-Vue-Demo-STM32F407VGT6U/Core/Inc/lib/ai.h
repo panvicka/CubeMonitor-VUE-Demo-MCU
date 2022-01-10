@@ -27,6 +27,6 @@ retStatus analog_input_init(anaInputs an_input_name, int32_t sample_from,
 
 void analog_input_handle(void);
 
-int32_t linearization_no_scaling_no_corrections(int32_t adc_value);
+int32_t lin_adc_no_scaling_no_corrections(int32_t adc_value);
 
 #endif /* INC_LIB_AI_H_ */

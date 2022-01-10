@@ -27,6 +27,16 @@ typedef struct {
 
 	uint8_t fall_edge_detectable;
 	uint8_t fall_edge_detected;
+
+	uint8_t long_press_detected;
+	uint8_t short_press_detected;
+	uint8_t double_press_detected;
+
+	uint8_t touch_detected;
+	uint16_t touch_counter;
+
+	digitalInputInitData digital_input_init_data;
+
 } digitalInputDef;
 
 static digitalInputDef inputs[DI_NONE];
@@ -55,6 +65,15 @@ retStatus input_get(uint32_t input_name, uint16_t type, int32_t *value) {
 		break;
 	case INPUT_DATA_DEBOUNCED_VALUE:
 		*value = !inputs[input_name].mx_state;
+		break;
+	case INPUT_DATA_LONG_PRESS:
+		*value = inputs[input_name].long_press_detected;
+		break;
+	case INPUT_DATA_SHORT_PRESS:
+		*value = inputs[input_name].short_press_detected;
+		break;
+	case INPUT_DATA_DOUBLE_PRESS:
+		*value = inputs[input_name].double_press_detected;
 		break;
 
 	default:
@@ -106,7 +125,7 @@ retStatus input_set(uint32_t input_name, uint16_t type, int32_t value) {
 }
 
 retStatus input_init(digInputs input_name, uint16_t gpio_pin,
-		GPIO_TypeDef *pin_port, uint16_t threshold) {
+		GPIO_TypeDef *pin_port, digitalInputInitData *digital_input_init_data) {
 
 	if (input_name >= DI_NONE) {
 		return ENODEV;
@@ -114,7 +133,7 @@ retStatus input_init(digInputs input_name, uint16_t gpio_pin,
 
 	inputs[input_name].gpio_pin = gpio_pin;
 	inputs[input_name].pin_port = pin_port;
-	inputs[input_name].debounc_threshold = threshold;
+	inputs[input_name].digital_input_init_data = digital_input_init_data;
 
 	inputs[input_name].mx_state = HAL_GPIO_ReadPin(inputs[input_name].pin_port,
 			inputs[input_name].gpio_pin);
@@ -152,6 +171,13 @@ void input_handle(void) {
 	}
 }
 
+void input_ack_press(digInputs input_name) {
+	inputs[input_name].touch_detected = 0;
+	inputs[input_name].short_press_detected = 0;
+	inputs[input_name].long_press_detected = 0;
+	inputs[input_name].touch_counter = 0;
+}
+
 void static _di_set_input_state(digInputs input_name, uint8_t state) {
 
 	if (inputs[input_name].mx_rewrites == DIO_ON) {
@@ -183,10 +209,12 @@ void static _di_compare_and_count(digInputs input_name) {
 	}
 
 	if (actual_state != inputs[input_name].mx_state) {
+
+		inputs[input_name].touch_detected = 1;
 		inputs[input_name].debounc_counter++;
 
 		if (inputs[input_name].debounc_counter
-				>= inputs[input_name].debounc_threshold) {
+				>= inputs[input_name].digital_input_init_data.debounc_time) {
 
 			if (inputs[input_name].mx_state == DIO_OFF) {
 				if (inputs[input_name].fall_edge_detectable == 1) {
@@ -203,9 +231,38 @@ void static _di_compare_and_count(digInputs input_name) {
 			_di_set_input_state(input_name, actual_state);
 
 		}
+
 	} else {
 		inputs[input_name].state_change_detected = 0;
 		inputs[input_name].debounc_counter = 0;
+	}
+
+	// todo button may be pulled down
+	if (inputs[input_name].touch_detected == 1) {
+
+		if (actual_state == 0) {
+			if (inputs[input_name].touch_counter < INT16_MAX) {
+				inputs[input_name].touch_counter++;
+			}
+		}
+
+		if (actual_state == 1
+				&& inputs[input_name].touch_counter
+						< inputs[input_name].digital_input_init_data.long_press_duration
+				&& inputs[input_name].long_press_detected == 0) {
+			inputs[input_name].short_press_detected = 1;
+		} else if (inputs[input_name].debounc_counter
+				>= inputs[input_name].long_press_detected) {
+			inputs[input_name].long_press_detected = 1;
+			inputs[input_name].debounc_counter = 0;
+		}
+
+		if (inputs[input_name].long_press_detected == 1 && actual_state == 1) {
+			inputs[input_name].short_press_detected = 0;
+			inputs[input_name].long_press_detected = 0;
+			inputs[input_name].touch_detected = 0;
+		}
+
 	}
 
 }

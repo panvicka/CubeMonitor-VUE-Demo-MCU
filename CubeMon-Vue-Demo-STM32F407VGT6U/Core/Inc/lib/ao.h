@@ -26,4 +26,6 @@ retStatus analog_output_init(ao_inputs an_output_name, uint32_t channel,
 retStatus analog_output_set(uint16_t an_output_name, uint16_t data_type,
 		int32_t value);
 
+uint32_t lin_dac_no_scaling_no_corrections(uint32_t voltage_value);
+
 #endif /* INC_LIB_AO_H_ */
