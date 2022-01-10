@@ -1,4 +1,4 @@
-# CubeMonitor+Vue Demo (MCU programm part)
+CubeMonitor+Vue Demo (MCU programm part) {#mainpage}
 ============
 
 Demonstration video: 
