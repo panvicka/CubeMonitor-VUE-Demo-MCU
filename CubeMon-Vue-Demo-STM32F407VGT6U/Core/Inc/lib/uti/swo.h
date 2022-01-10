@@ -8,7 +8,7 @@
 #ifndef INC_LIB_SWO_H_
 #define INC_LIB_SWO_H_
 
-#include <stm32f4xx_hal.h>
+#include <lib/uti/hw_hal_includes.h>
 #include <lib/uti/utility.h>
 
 typedef enum {
@@ -19,7 +19,7 @@ typedef enum {
 	SWO_NONE,
 } swo_init_type;
 
-ret_state swo_init(swo_init_type type);
+retStatus swo_init(swo_init_type type);
 void swo_print(char text[]);
 
 #endif /* INC_LIB_SWO_H_ */

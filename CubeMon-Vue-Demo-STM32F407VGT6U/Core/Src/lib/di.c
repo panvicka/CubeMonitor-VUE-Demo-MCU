@@ -5,9 +5,9 @@
  *      Author: panvicka
  */
 
-#include "main.h"
-#include "lib/uti/utility.h"
-#include "lib/di.h"
+#include <main.h>
+#include <lib/uti/utility.h>
+#include <lib/di.h>
 
 typedef struct {
 	uint16_t state_change_detected;
@@ -27,15 +27,15 @@ typedef struct {
 
 	uint8_t fall_edge_detectable;
 	uint8_t fall_edge_detected;
-} input;
+} digitalInputDef;
 
-static input inputs[DI_NONE];
+static digitalInputDef inputs[DI_NONE];
 
-void static _di_input_debouns(di_inputs input_name);
-void static _di_set_input_state(di_inputs input_name, uint8_t state);
-void static _di_compare_and_count(di_inputs input_name);
+void static _di_input_debouns(digInputs input_name);
+void static _di_set_input_state(digInputs input_name, uint8_t state);
+void static _di_compare_and_count(digInputs input_name);
 
-ret_state input_get(uint32_t input_name, uint16_t type, int32_t *value) {
+retStatus input_get(uint32_t input_name, uint16_t type, int32_t *value) {
 
 	if (input_name <= DI_NONE) {
 		return ENODEV;
@@ -66,7 +66,7 @@ ret_state input_get(uint32_t input_name, uint16_t type, int32_t *value) {
 
 }
 
-ret_state input_set(uint32_t input_name, uint16_t type, int32_t value) {
+retStatus input_set(uint32_t input_name, uint16_t type, int32_t value) {
 
 	if (input_name >= DI_NONE) {
 		return ENODEV;
@@ -105,7 +105,7 @@ ret_state input_set(uint32_t input_name, uint16_t type, int32_t value) {
 
 }
 
-ret_state input_init(di_inputs input_name, uint16_t gpio_pin,
+retStatus input_init(digInputs input_name, uint16_t gpio_pin,
 		GPIO_TypeDef *pin_port, uint16_t threshold) {
 
 	if (input_name >= DI_NONE) {
@@ -119,7 +119,7 @@ ret_state input_init(di_inputs input_name, uint16_t gpio_pin,
 	inputs[input_name].mx_state = HAL_GPIO_ReadPin(inputs[input_name].pin_port,
 			inputs[input_name].gpio_pin);
 
-	if (inputs[input_name].mx_state == 0) {
+	if (inputs[input_name].mx_state == DIO_OFF) {
 		inputs[input_name].fall_edge_detectable = 1;
 	} else {
 		inputs[input_name].ris_edge_detectable = 1;
@@ -129,7 +129,7 @@ ret_state input_init(di_inputs input_name, uint16_t gpio_pin,
 
 }
 
-input_states input_state_now(di_inputs input_name) {
+dio_states input_state_now(digInputs input_name) {
 	if (input_name < DI_NONE) {
 		return !inputs[input_name].mx_state;
 	} else {
@@ -137,7 +137,7 @@ input_states input_state_now(di_inputs input_name) {
 	}
 }
 
-input_states input_state_debounced(di_inputs input_name) {
+dio_states input_state_debounced(digInputs input_name) {
 	if (input_name < DI_NONE) {
 		return HAL_GPIO_ReadPin(inputs[input_name].pin_port,
 				inputs[input_name].gpio_pin);
@@ -152,18 +152,18 @@ void input_handle(void) {
 	}
 }
 
-void static _di_set_input_state(di_inputs input_name, uint8_t state) {
+void static _di_set_input_state(digInputs input_name, uint8_t state) {
 
-	if (inputs[input_name].mx_rewrites == 1) {
+	if (inputs[input_name].mx_rewrites == DIO_ON) {
 		inputs[input_name].mx_state = !inputs[input_name].mx_value;
 	} else {
 		inputs[input_name].mx_state = state;
 	}
 
 }
-void static _di_input_debouns(di_inputs input_name) {
+void static _di_input_debouns(digInputs input_name) {
 
-	if (inputs[input_name].mx_rewrites == 0) {
+	if (inputs[input_name].mx_rewrites == DIO_OFF) {
 		_di_compare_and_count(input_name);
 	} else {
 		inputs[input_name].mx_state = !inputs[input_name].mx_value;
@@ -171,7 +171,7 @@ void static _di_input_debouns(di_inputs input_name) {
 
 }
 
-void static _di_compare_and_count(di_inputs input_name) {
+void static _di_compare_and_count(digInputs input_name) {
 	uint8_t actual_state;
 	actual_state = HAL_GPIO_ReadPin(inputs[input_name].pin_port,
 			inputs[input_name].gpio_pin);
@@ -188,7 +188,7 @@ void static _di_compare_and_count(di_inputs input_name) {
 		if (inputs[input_name].debounc_counter
 				>= inputs[input_name].debounc_threshold) {
 
-			if (inputs[input_name].mx_state == 0) {
+			if (inputs[input_name].mx_state == DIO_OFF) {
 				if (inputs[input_name].fall_edge_detectable == 1) {
 					inputs[input_name].fall_edge_detected = 1;
 					inputs[input_name].fall_edge_detectable = 0;

@@ -10,7 +10,7 @@
 
 #include <lib/uti/utility.h>
 
-ret_state run_time_get(uint32_t time, uint16_t data, int32_t *value);
-ret_state run_time_set(uint32_t time, uint16_t data, int32_t value);
+retStatus run_time_get(uint32_t time, uint16_t data, int32_t *value);
+retStatus run_time_set(uint32_t time, uint16_t data, int32_t value);
 
 #endif /* INC_LIB_RUN_TIME_H_ */

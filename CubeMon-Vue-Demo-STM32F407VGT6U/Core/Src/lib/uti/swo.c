@@ -13,7 +13,7 @@
 
 swo_init_type swo_type = SWO_NOT_ACTIVE;
 
-ret_state swo_init(swo_init_type type) {
+retStatus swo_init(swo_init_type type) {
 
 	if (type >= SWO_NONE)
 		return ENODEV;
