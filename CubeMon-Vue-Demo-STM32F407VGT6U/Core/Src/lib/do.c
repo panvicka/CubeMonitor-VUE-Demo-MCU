@@ -6,17 +6,18 @@
  */
 
 #include <lib/do.h>
+#include <lib/uti/swo.h>
 
-typedef struct {
+typedef struct digitalOutputDef {
 	uint8_t mx_state;
 	uint16_t pin;
-	GPIO_TypeDef* port;
+	GPIO_TypeDef *port;
 } digitalOutputDef;
 
 static digitalOutputDef outputs[DO_NONE];
 
-retStatus output_init(digOutputs output, uint16_t gpio_pin, GPIO_TypeDef* pin_port,
-		dio_states init_state) {
+retStatus output_init(digOutputs output, uint16_t gpio_pin,
+		GPIO_TypeDef *pin_port, dio_states init_state) {
 
 	if (output >= DO_NONE) {
 		swo_print("do: initialization of invalid output");
@@ -31,7 +32,7 @@ retStatus output_init(digOutputs output, uint16_t gpio_pin, GPIO_TypeDef* pin_po
 	outputs[output].pin = gpio_pin;
 	outputs[output].port = pin_port;
 
-	do_output_set(output, init_state);
+	output_set(output, init_state);
 
 	return EOK;
 
@@ -58,9 +59,11 @@ retStatus output_set(digOutputs output, dio_states state) {
 	}
 
 	if (state == DIO_ON) {
-		GPIO_SetBits(outputs[output].port, outputs[output].pin);
+		HAL_GPIO_WritePin(outputs[output].port, outputs[output].pin,
+				GPIO_PIN_SET);
 	} else if (state == DIO_OFF) {
-		GPIO_ResetBits(outputs[output].port, outputs[output].pin);
+		HAL_GPIO_WritePin(outputs[output].port, outputs[output].pin,
+				GPIO_PIN_RESET);
 	}
 
 	return EOK;
@@ -72,7 +75,7 @@ dio_states output_get_state(digOutputs output) {
 		return ENODEV;
 	}
 
-	return outputs[output_name].mx_state;
+	return outputs[output].mx_state;
 
 }
 

@@ -5,7 +5,9 @@
  *      Author: panvicka
  */
 
-typedef struct {
+#include <lib/blink.h>
+
+typedef struct pwmBlinking {
 
 	pwmBlinkingTimingInit timing_init;
 	uint32_t blinking_counter;

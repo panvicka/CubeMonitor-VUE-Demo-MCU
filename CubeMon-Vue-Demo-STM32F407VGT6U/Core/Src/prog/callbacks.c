@@ -7,6 +7,8 @@
 
 #include <prog/callbacks.h>
 #include <prog/run.h>
+#include <lib/ao.h>
+#include <lib/ai.h>
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
 	analog_input_handle();

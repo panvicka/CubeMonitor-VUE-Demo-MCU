@@ -7,6 +7,8 @@
 
 #include <lib/di.h>
 #include <lib/do.h>
+#include <lib/ai.h>
+#include <lib/ao.h>
 #include <lib/uti/swo.h>
 #include <main.h>
 #include <prog/init.h>
@@ -47,9 +49,9 @@ void static _init_di(void) {
 	digital_input_init.long_press_duration = DI_LONG_PRESS_MIN_DURATION;
 
 	status += input_init(DI_BUTTON, BUTTON_Pin, BUTTON_GPIO_Port,
-			&digital_input_init);
-	status += input_init(DI_1, DI_1_Pin, DI_1_GPIO_Port, &digital_input_init);
-	status += input_init(DI_2, DI_2_Pin, DI_2_GPIO_Port, &digital_input_init);
+			digital_input_init);
+	status += input_init(DI_1, DI_1_Pin, DI_1_GPIO_Port, digital_input_init);
+	status += input_init(DI_2, DI_2_Pin, DI_2_GPIO_Port, digital_input_init);
 
 	if (status != EOK) {
 		initialization_error_handle();

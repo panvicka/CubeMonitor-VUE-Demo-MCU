@@ -20,7 +20,7 @@ typedef enum {
 }anaOutputs;
 #endif
 
-retStatus analog_output_init(ao_inputs an_output_name, uint32_t channel,
+retStatus analog_output_init(anaOutputs an_output_name, uint32_t channel,
 		liner_fce linear_fce);
 
 retStatus analog_output_set(uint16_t an_output_name, uint16_t data_type,

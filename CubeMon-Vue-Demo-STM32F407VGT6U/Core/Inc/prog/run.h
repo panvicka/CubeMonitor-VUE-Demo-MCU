@@ -8,6 +8,8 @@
 #ifndef INC_PROG_RUN_H_
 #define INC_PROG_RUN_H_
 
+#include <lib/uti/hw_hal_includes.h>
+
 void prog_SM_tasks(void);
 void prog_1s_tasks(void);
 void prog_1ms_tasks(void);

@@ -10,6 +10,7 @@
 
 #include <lib/uti/hw_hal_includes.h>
 #include <lib/uti/lib_config.h>
+#include <lib/uti/utility.h>
 
 #ifdef LIB_DO
 #include <prog/init.h>
@@ -20,7 +21,7 @@ typedef enum {
 #endif
 
 retStatus output_init(digOutputs output, uint16_t gpio_pin,
-		GPIO_TypeDef* pin_port, dio_states init_state);
+		GPIO_TypeDef *pin_port, dio_states init_state);
 retStatus output_toggle(digOutputs output);
 retStatus output_set(digOutputs output, dio_states state);
 dio_states output_get_state(digOutputs output);

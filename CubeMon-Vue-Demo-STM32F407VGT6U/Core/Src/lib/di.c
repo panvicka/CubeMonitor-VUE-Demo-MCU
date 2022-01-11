@@ -9,7 +9,7 @@
 #include <lib/uti/utility.h>
 #include <lib/di.h>
 
-typedef struct {
+typedef struct digitalInputDef {
 	uint16_t state_change_detected;
 	uint16_t debounc_counter;
 	uint16_t debounc_threshold;
@@ -125,7 +125,7 @@ retStatus input_set(uint32_t input_name, uint16_t type, int32_t value) {
 }
 
 retStatus input_init(digInputs input_name, uint16_t gpio_pin,
-		GPIO_TypeDef *pin_port, digitalInputInitData *digital_input_init_data) {
+		GPIO_TypeDef *pin_port, digitalInputInitData digital_input_init_data) {
 
 	if (input_name >= DI_NONE) {
 		return ENODEV;

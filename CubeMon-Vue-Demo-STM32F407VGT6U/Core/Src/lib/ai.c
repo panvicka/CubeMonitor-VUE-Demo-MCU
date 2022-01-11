@@ -7,8 +7,9 @@
 
 #include <lib/ai.h>
 #include <lib/uti/utility.h>
+#include <lib/uti/swo.h>
 
-typedef struct {
+typedef struct analogInput {
 	uint32_t total;
 	uint16_t count;
 	uint16_t averaged_12b;
@@ -22,8 +23,8 @@ typedef struct {
 	liner_fce liner_fce;
 } analogInput;
 
-static struct analog_di_mcu analog_inputs[AI_NONE];
-uint32_t ADC_data_buffer[(AI_NONE * 2) + 5];
+static analogInput analog_inputs[AI_NONE];
+uint32_t ADC_data_buffer[(AI_NONE * 2) + 1];
 
 retStatus analog_input_get(uint16_t analog_input, uint16_t data, int32_t *value) {
 
@@ -122,7 +123,7 @@ void analog_input_handle(void) {
 
 }
 
-int32_t lin_adc_no_scaling_no_corrections(int32_t adc_value) {
+uint32_t lin_adc_no_scaling_no_corrections(uint32_t adc_value) {
 	return adc_value * 330 / 4094;
 }
 

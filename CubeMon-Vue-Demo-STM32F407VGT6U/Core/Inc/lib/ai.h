@@ -20,13 +20,13 @@ typedef enum {
 }anaInputs;
 #endif
 
-extern uint32_t ADC_data_buffer[(AI_NONE * 2) + 5];
+extern uint32_t ADC_data_buffer[(AI_NONE * 2) + 1];
 
 retStatus analog_input_init(anaInputs an_input_name, int32_t sample_from,
 		liner_fce linearization_function);
 
 void analog_input_handle(void);
 
-int32_t lin_adc_no_scaling_no_corrections(int32_t adc_value);
+uint32_t lin_adc_no_scaling_no_corrections(uint32_t adc_value);
 
 #endif /* INC_LIB_AI_H_ */

@@ -32,7 +32,7 @@ typedef enum {
 	ANA_DIO_RAW_CURRENT, ANA_DIO_RAW_AVERAGED, ANA_DIO_VOLTAGE
 } aio_data;
 
-typedef int32_t (*liner_fce)( int32_t);
+typedef uint32_t (*liner_fce)( uint32_t);
 
 void initialization_error_handle(void);
 #endif /* INC_LIB_UTILITY_H_ */

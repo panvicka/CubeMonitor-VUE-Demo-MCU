@@ -43,7 +43,7 @@ retStatus input_get(uint32_t input, uint16_t data, int32_t *value);
 retStatus input_set(uint32_t input, uint16_t data, int32_t value);
 
 retStatus input_init(digInputs input_name, uint16_t gpio_pin,
-		GPIO_TypeDef *pin_port, digitalInputInitData *digital_input_init_data);
+		GPIO_TypeDef *pin_port, digitalInputInitData digital_input_init_data);
 
 void input_ack_press(digInputs input_name);
 

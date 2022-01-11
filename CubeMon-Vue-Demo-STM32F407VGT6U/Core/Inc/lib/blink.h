@@ -8,6 +8,8 @@
 #ifndef INC_LIB_BLINK_H_
 #define INC_LIB_BLINK_H_
 
+#include <lib/uti/hw_hal_includes.h>
+
 typedef enum {
 	PWM_BLINK_FADING, PWM_BLINK_ON_OFF,
 } pwmBlinkingType;
