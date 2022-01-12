@@ -20,12 +20,23 @@ typedef enum {
 }digInputs;
 #endif
 
-typedef struct {
-	uint16_t debounc_time;
-	uint16_t short_press_duration;
-	uint16_t long_press_duration;
-	uint16_t double_press_spacing;
+typedef enum {
+	INPUT_HW_ACTIVE_HIGH, INPUT_HW_ACTIVE_LOW,
+} digitalInputHWType;
 
+typedef enum {
+	INPUT_SW_ON_OFF_INPUT, INPUT_SW_BUTTON,
+} digitalInputSWType;
+
+typedef struct digitalInputInitData {
+	uint16_t mcu_pin;
+	GPIO_TypeDef *mcu_port;
+
+	uint16_t debounc_time;
+	uint16_t long_press_ms;
+	uint16_t double_press_spacing;
+	digitalInputHWType hw_type;
+	digitalInputSWType sw_type;
 } digitalInputInitData;
 
 typedef enum {
@@ -42,14 +53,18 @@ typedef enum {
 retStatus input_get(uint32_t input, uint16_t data, int32_t *value);
 retStatus input_set(uint32_t input, uint16_t data, int32_t value);
 
-retStatus input_init(digInputs input_name, uint16_t gpio_pin,
-		GPIO_TypeDef *pin_port, digitalInputInitData digital_input_init_data);
+retStatus input_init(digInputs input_name,
+		digitalInputInitData digital_input_init_data);
 
-void input_ack_press(digInputs input_name);
+retStatus input_ack_press(digInputs input_name);
+uint8_t input_is_short_press(digInputs input_name);
+uint8_t input_is_long_press(digInputs input_name);
 
 dio_states input_state_now(digInputs input_name);
 dio_states input_state_debounced(digInputs input_name);
 
 void input_handle(void);
+
+__weak GPIO_PinState input_get_hw_state(digInputs input_name);
 
 #endif /* INC_DI_DI_H_ */
