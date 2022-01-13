@@ -21,9 +21,9 @@ typedef enum {
 #endif
 
 retStatus output_init(digOutputs output, uint16_t gpio_pin,
-		GPIO_TypeDef *pin_port, dio_states init_state);
+		GPIO_TypeDef *pin_port, dioStates init_state);
 retStatus output_toggle(digOutputs output);
-retStatus output_set(digOutputs output, dio_states state);
-dio_states output_get_state(digOutputs output);
+retStatus output_set(digOutputs output, dioStates state);
+dioStates output_get_state(digOutputs output);
 
 #endif /* INC_DO_DO_H_ */

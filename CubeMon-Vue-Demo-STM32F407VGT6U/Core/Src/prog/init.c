@@ -15,7 +15,6 @@
 
 const uint16_t DI_DEBOUNC_MS = 50;
 const uint16_t DI_DOUBLE_PRESS_SPACING = 40;
-const uint16_t DI_SHORT_PRESS_MIN_DURATION = 100;
 const uint16_t DI_LONG_PRESS_MIN_DURATION = 300;
 
 const uint16_t AI_SAMPLING = 100;
@@ -45,13 +44,26 @@ void static _init_di(void) {
 	digitalInputInitData digital_input_init;
 	digital_input_init.debounc_time = DI_DEBOUNC_MS;
 	digital_input_init.double_press_spacing = DI_DOUBLE_PRESS_SPACING;
-	digital_input_init.short_press_duration = DI_SHORT_PRESS_MIN_DURATION;
-	digital_input_init.long_press_duration = DI_LONG_PRESS_MIN_DURATION;
+	digital_input_init.long_press_ms = DI_LONG_PRESS_MIN_DURATION;
+	digital_input_init.input_get_hw_state = NULL;
 
-	status += input_init(DI_BUTTON, BUTTON_Pin, BUTTON_GPIO_Port,
-			digital_input_init);
-	status += input_init(DI_1, DI_1_Pin, DI_1_GPIO_Port, digital_input_init);
-	status += input_init(DI_2, DI_2_Pin, DI_2_GPIO_Port, digital_input_init);
+	digital_input_init.mcu_pin = BUTTON_Pin;
+	digital_input_init.mcu_port = BUTTON_GPIO_Port;
+	digital_input_init.sw_type = INPUT_SW_BUTTON;
+	digital_input_init.hw_type = INPUT_HW_ACTIVE_HIGH;
+	status += input_init(DI_BUTTON, digital_input_init);
+
+	digital_input_init.mcu_pin = DI_1_Pin;
+	digital_input_init.mcu_port = DI_1_GPIO_Port;
+	digital_input_init.sw_type = INPUT_SW_ON_OFF_INPUT;
+	digital_input_init.hw_type = INPUT_HW_ACTIVE_LOW;
+	status += input_init(DI_1, digital_input_init);
+
+	digital_input_init.mcu_pin = DI_2_Pin;
+	digital_input_init.mcu_port = DI_2_GPIO_Port;
+	digital_input_init.sw_type = INPUT_SW_ON_OFF_INPUT;
+	digital_input_init.hw_type = INPUT_HW_ACTIVE_LOW;
+	status += input_init(DI_2, digital_input_init);
 
 	if (status != EOK) {
 		initialization_error_handle();

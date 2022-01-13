@@ -52,7 +52,7 @@ static digitalInputDef inputs[DI_NONE - 1];
 
 void static _input_debounc(digitalInputDef *input,
 		GPIO_PinState current_HW_state);
-dio_states static _input_get_logical_value(digitalInputDef *input,
+dioStates static _input_get_logical_value(digitalInputDef *input,
 		GPIO_PinState pin_state);
 
 retStatus input_get(uint32_t input_name, uint16_t type, int32_t *value) {
@@ -203,7 +203,7 @@ retStatus input_init(digInputs input_name,
 
 }
 
-dio_states input_state_debounced(digInputs input_name) {
+dioStates input_state_debounced(digInputs input_name) {
 	if (input_name >= DI_NONE && inputs[input_name].is_initialized == 0) {
 		return !inputs[input_name].mx_logical_state;
 	} else {
@@ -211,7 +211,7 @@ dio_states input_state_debounced(digInputs input_name) {
 	}
 }
 
-dio_states input_state_now(digInputs input_name) {
+dioStates input_state_now(digInputs input_name) {
 	if (input_name >= DI_NONE || inputs[input_name].is_initialized == 0) {
 		return inputs[input_name].inits.input_get_hw_state(input_name);
 	} else {
@@ -269,7 +269,7 @@ __weak GPIO_PinState input_get_hw_HAL(digInputs input_name) {
 
 }
 
-dio_states static _input_get_logical_value(digitalInputDef *input,
+dioStates static _input_get_logical_value(digitalInputDef *input,
 		GPIO_PinState pin_state) {
 
 	if (pin_state == GPIO_PIN_RESET) {

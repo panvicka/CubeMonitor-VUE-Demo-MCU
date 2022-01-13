@@ -17,7 +17,7 @@ typedef struct digitalOutputDef {
 static digitalOutputDef outputs[DO_NONE];
 
 retStatus output_init(digOutputs output, uint16_t gpio_pin,
-		GPIO_TypeDef *pin_port, dio_states init_state) {
+		GPIO_TypeDef *pin_port, dioStates init_state) {
 
 	if (output >= DO_NONE) {
 		swo_print("do: initialization of invalid output");
@@ -48,7 +48,7 @@ retStatus output_toggle(digOutputs output) {
 	return EOK;
 }
 
-retStatus output_set(digOutputs output, dio_states state) {
+retStatus output_set(digOutputs output, dioStates state) {
 
 	if (output >= DO_NONE) {
 		return ENODEV;
@@ -69,7 +69,7 @@ retStatus output_set(digOutputs output, dio_states state) {
 	return EOK;
 }
 
-dio_states output_get_state(digOutputs output) {
+dioStates output_get_state(digOutputs output) {
 
 	if (output >= DO_NONE) {
 		return ENODEV;

@@ -18,6 +18,7 @@ typedef enum {
 	ENODEV = 19, // No such device
 	EINVAL = 22, // Invalid argument
 	EBADRQC = 56, // Invalid request code
+	ENODATA = 61, // No data
 	ECOMM = 70, // Communication error on send
 	EOVERFLOW = 76, // Value too large for defined data type
 	EMSGSIZE = 90, // Message too long
@@ -25,14 +26,17 @@ typedef enum {
 } retStatus;
 
 typedef enum {
-	DIO_OFF = 0, DIO_ON = 1, DIO_NOT_INITIALIZED = ENODEV,
-} dio_states;
+	DIO_OFF = 0,
+	DIO_ON = 1,
+	DIO_NOT_INITIALIZED = ENODEV,
+	DIO_PROBLEM_OCCURED = ENODATA
+} dioStates;
 
 typedef enum {
 	ANA_DIO_RAW_CURRENT, ANA_DIO_RAW_AVERAGED, ANA_DIO_VOLTAGE
-} aio_data;
+} aioData;
 
-typedef uint32_t (*liner_fce)( uint32_t);
+typedef uint32_t (*liner_fce)(uint32_t);
 
 void initialization_error_handle(void);
 #endif /* INC_LIB_UTILITY_H_ */
