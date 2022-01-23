@@ -15,15 +15,24 @@
 #ifdef LIB_DO
 #include <prog/init.h>
 #else
-typedef enum {
+typedef enum digOutputs {
 	DO_NONE,
 }digOutputs;
 #endif
 
-retStatus output_init(digOutputs output, uint16_t gpio_pin,
-		GPIO_TypeDef *pin_port, dioStates init_state);
+typedef struct digitalOutputInitData {
+	uint16_t pin;
+	GPIO_TypeDef *port;
+	GPIO_PinState init_state;
+} digitalOutputInitData;
+
+retStatus output_init(digOutputs output,
+		digitalOutputInitData digital_output_init_data);
+
 retStatus output_toggle(digOutputs output);
-retStatus output_set(digOutputs output, dioStates state);
+retStatus output_set(digOutputs output_name, GPIO_PinState state);
 dioStates output_get_state(digOutputs output);
+
+__weak retStatus output_set_hw_HAL(digOutputs output_name, GPIO_PinState state);
 
 #endif /* INC_DO_DO_H_ */

@@ -35,7 +35,6 @@ void init(void) {
 	_init_ai();
 	_init_ao();
 
-
 	swo_print("hello world");
 }
 
@@ -73,12 +72,21 @@ void static _init_di(void) {
 
 void static _init_do(void) {
 	uint16_t status = EOK;
-	status += output_init(DO_LED_ORANGE, DIODE_DO_ORANGE_Pin,
-	DIODE_DO_ORANGE_GPIO_Port, DIO_OFF);
-	status += output_init(DO_LED_RED, DIODE_DO_RED_Pin,
-	DIODE_DO_RED_GPIO_Port, DIO_OFF);
-	status += output_init(DO_LED_BLUE, DIODE_DO_BLUE_Pin,
-	DIODE_DO_BLUE_GPIO_Port, DIO_OFF);
+
+	digitalOutputInitData digital_output_init;
+	digital_output_init.init_state = GPIO_PIN_RESET;
+
+	digital_output_init.pin = DIODE_DO_ORANGE_Pin;
+	digital_output_init.port = DIODE_DO_ORANGE_GPIO_Port;
+	status += output_init(DO_LED_ORANGE, digital_output_init);
+
+	digital_output_init.pin = DIODE_DO_RED_Pin;
+	digital_output_init.port = DIODE_DO_RED_GPIO_Port;
+	status += output_init(DO_LED_RED, digital_output_init);
+
+	digital_output_init.pin = DIODE_DO_BLUE_Pin;
+	digital_output_init.port = DIODE_DO_BLUE_GPIO_Port;
+	status += output_init(DO_LED_BLUE, digital_output_init);
 
 	if (status != EOK) {
 		initialization_error_handle();

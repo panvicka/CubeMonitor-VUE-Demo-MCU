@@ -57,7 +57,7 @@ dioStates static _input_get_logical_value(digitalInputDef *input,
 
 retStatus input_get(uint32_t input_name, uint16_t type, int32_t *value) {
 
-	if (input_name >= DI_NONE && inputs[input_name].is_initialized == 0) {
+	if (input_name >= DI_NONE || inputs[input_name].is_initialized == 0) {
 		return ENODEV;
 	}
 
@@ -92,7 +92,7 @@ retStatus input_get(uint32_t input_name, uint16_t type, int32_t *value) {
 
 retStatus input_set(uint32_t input_name, uint16_t type, int32_t value) {
 
-	if (input_name >= DI_NONE && inputs[input_name].is_initialized == 0) {
+	if (input_name >= DI_NONE || inputs[input_name].is_initialized == 0) {
 		return ENODEV;
 	}
 
@@ -204,7 +204,7 @@ retStatus input_init(digInputs input_name,
 }
 
 dioStates input_state_debounced(digInputs input_name) {
-	if (input_name >= DI_NONE && inputs[input_name].is_initialized == 0) {
+	if (input_name >= DI_NONE || inputs[input_name].is_initialized == 0) {
 		return !inputs[input_name].mx_logical_state;
 	} else {
 		return ENODEV;
