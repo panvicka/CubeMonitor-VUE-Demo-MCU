@@ -14,8 +14,8 @@
 #include <prog/init.h>
 
 const uint16_t DI_DEBOUNC_MS = 50;
-const uint16_t DI_DOUBLE_PRESS_SPACING = 40;
-const uint16_t DI_LONG_PRESS_MIN_DURATION = 300;
+const uint16_t DI_DOUBLE_PRESS_SPACING = 300;
+const uint16_t DI_LONG_PRESS_MIN_DURATION = 500;
 
 const uint16_t AI_SAMPLING = 100;
 
@@ -28,12 +28,13 @@ void static _init_ao(void);
 
 void init(void) {
 
+	swo_init(SWO_PLAIN_MESSAGES);
+
 	_init_di();
 	_init_do();
 	_init_ai();
 	_init_ao();
 
-	swo_init(SWO_PLAIN_MESSAGES);
 
 	swo_print("hello world");
 }

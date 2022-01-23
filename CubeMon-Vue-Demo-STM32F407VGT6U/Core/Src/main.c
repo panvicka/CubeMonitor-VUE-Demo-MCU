@@ -116,10 +116,11 @@ int main(void) {
 //  MX_IWDG_Init();
 	/* USER CODE BEGIN 2 */
 //	HAL_GPIO_WritePin(DIODE_DO_BLUE_GPIO_Port, DIODE_DO_BLUE_Pin, GPIO_PIN_SET);
-
 	init();
 	/* USER CODE END 2 */
-
+	HAL_TIM_Base_Start_IT(&htim10);
+	HAL_TIM_Base_Start_IT(&htim13);
+	HAL_TIM_Base_Start_IT(&htim14);
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	while (1) {
@@ -387,9 +388,9 @@ static void MX_TIM10_Init(void) {
 
 	/* USER CODE END TIM10_Init 1 */
 	htim10.Instance = TIM10;
-	htim10.Init.Prescaler = 0;
+	htim10.Init.Prescaler = 2;
 	htim10.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim10.Init.Period = 65535;
+	htim10.Init.Period = 55999;
 	htim10.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	htim10.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
 	if (HAL_TIM_Base_Init(&htim10) != HAL_OK) {
@@ -416,9 +417,9 @@ static void MX_TIM13_Init(void) {
 
 	/* USER CODE END TIM13_Init 1 */
 	htim13.Instance = TIM13;
-	htim13.Init.Prescaler = 0;
+	htim13.Init.Prescaler = 2624;
 	htim13.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim13.Init.Period = 65535;
+	htim13.Init.Period = 63999;
 	htim13.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	htim13.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
 	if (HAL_TIM_Base_Init(&htim13) != HAL_OK) {
@@ -445,9 +446,9 @@ static void MX_TIM14_Init(void) {
 
 	/* USER CODE END TIM14_Init 1 */
 	htim14.Instance = TIM14;
-	htim14.Init.Prescaler = 0;
+	htim14.Init.Prescaler = 79;
 	htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim14.Init.Period = 65535;
+	htim14.Init.Period = 62999;
 	htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
 	if (HAL_TIM_Base_Init(&htim14) != HAL_OK) {
@@ -493,8 +494,7 @@ static void MX_GPIO_Init(void) {
 
 	/*Configure GPIO pin Output Level */
 	HAL_GPIO_WritePin(GPIOD,
-			DIODE_DO_ORANGE_Pin | DIODE_DO_RED_Pin | DIODE_DO_BLUE_Pin,
-			GPIO_PIN_RESET);
+	DIODE_DO_ORANGE_Pin | DIODE_DO_RED_Pin | DIODE_DO_BLUE_Pin, GPIO_PIN_RESET);
 
 	/*Configure GPIO pin : BUTTON_Pin */
 	GPIO_InitStruct.Pin = BUTTON_Pin;

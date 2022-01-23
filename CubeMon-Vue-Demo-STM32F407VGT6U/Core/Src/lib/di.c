@@ -48,7 +48,7 @@ typedef struct digitalInputDef {
 
 } digitalInputDef;
 
-static digitalInputDef inputs[DI_NONE - 1];
+static digitalInputDef inputs[DI_NONE];
 
 void static _input_debounc(digitalInputDef *input,
 		GPIO_PinState current_HW_state);

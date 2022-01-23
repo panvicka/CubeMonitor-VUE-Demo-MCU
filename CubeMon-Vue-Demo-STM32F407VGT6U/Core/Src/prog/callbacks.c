@@ -10,17 +10,17 @@
 #include <lib/ao.h>
 #include <lib/ai.h>
 
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
 	analog_input_handle();
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 
-	if (htim->Instance == TIM4) {
+	if (htim->Instance == TIM10) {
 		prog_1ms_tasks();
-	} else if (htim->Instance == TIM6) {
+	} else if (htim->Instance == TIM14) {
 		prog_SM_tasks();
-	} else if (htim->Instance == TIM5) {
+	} else if (htim->Instance == TIM13) {
 		prog_1s_tasks();
 	}
 

@@ -9,17 +9,29 @@
 #include <prog/run.h>
 #include <sys/_stdint.h>
 
-static uint32_t mx_operation_time_in_seconds = 0;
-static uint32_t mx_button_long_presses = 0;
-static uint32_t mx_button_short_presses = 0;
+typedef struct programData {
+
+	uint32_t mx_counter;
+	uint32_t mx_operation_time_in_seconds;
+
+	uint8_t increase_counter_every_1s;
+
+} programData;
+
+static programData data;
+
+void static prog_counter_handling(void);
 
 void prog_SM_tasks(void) {
-	mx_button_long_presses = 1;
-	mx_button_short_presses = 1;
+	prog_counter_handling();
 }
 
 void prog_1s_tasks(void) {
-	mx_operation_time_in_seconds++;
+	data.mx_operation_time_in_seconds++;
+
+	if (data.increase_counter_every_1s == 1) {
+		data.mx_counter++;
+	}
 
 }
 
@@ -31,4 +43,23 @@ void prog_1ms_tasks(void) {
 
 void prog_fast_tasks(void) {
 
+}
+
+void static prog_counter_handling(void) {
+
+	if (input_get_action(DI_BUTTON, INPUT_ACT_SHORT_PRESS)) {
+		data.mx_counter++;
+		input_ack_action(DI_BUTTON, INPUT_ACT_SHORT_PRESS);
+	}
+
+	if (input_get_action(DI_BUTTON, INPUT_ACT_DOUBLE_PRESS)) {
+		data.mx_counter = 0;
+		input_ack_action(DI_BUTTON, INPUT_ACT_DOUBLE_PRESS);
+	}
+
+	if (input_get_action(DI_BUTTON, INPUT_ACT_LONG_PRESS)) {
+		data.increase_counter_every_1s = 1;
+	} else {
+		data.increase_counter_every_1s = 0;
+	}
 }

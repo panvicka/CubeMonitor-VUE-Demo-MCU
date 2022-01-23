@@ -24,7 +24,7 @@ retStatus output_init(digOutputs output, uint16_t gpio_pin,
 		return ENODEV;
 	}
 
-	if (init_state != DIO_OFF || init_state != DIO_ON) {
+	if (init_state != DIO_OFF && init_state != DIO_ON) {
 		swo_print("do: initialization with wrong init state");
 		return EINVAL;
 	}

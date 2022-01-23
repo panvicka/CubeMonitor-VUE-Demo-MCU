@@ -38,7 +38,7 @@ retStatus analog_output_init(anaOutputs an_output_name, uint32_t channel,
 		return ENODEV;
 	}
 
-	if (channel != DAC_CHANNEL_1 || channel != DAC_CHANNEL_2) {
+	if (channel != DAC_CHANNEL_1 && channel != DAC_CHANNEL_2) {
 		swo_print("ao: initialization with invalid DAC channel");
 		return ENODEV;
 	}
