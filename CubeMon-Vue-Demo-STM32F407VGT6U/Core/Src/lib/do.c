@@ -24,12 +24,6 @@ retStatus output_init(digOutputs output_name,
 		return ENODEV;
 	}
 
-//	if (digital_output_init_data.init_state != DIO_OFF
-//			&& digital_output_init_data.init_state != DIO_ON) {
-//		swo_print("do: initialization with wrong init state");
-//		return EINVAL;
-//	}
-
 	if (!IS_GPIO_PIN_ACTION(digital_output_init_data.init_state)) {
 		swo_print("do: initialization with invalid state");
 		return ENODEV;

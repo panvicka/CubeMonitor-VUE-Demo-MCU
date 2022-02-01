@@ -10,9 +10,6 @@
 #include <lib/uti/swo.h>
 #include <lib/di.h>
 
-//todo move me to def
-#define ALLOW_CUBEMX_OVERWRITE
-
 typedef enum digitalInputSM {
 	INPUT_SM_WAITING_FOR_CHANGE,
 	INPUT_SM_DEBOUNC,

@@ -8,15 +8,16 @@
 #include <lib/ao.h>
 #include <lib/uti/swo.h>
 
-#ifdef LIB_AO
+#ifdef DAC
 DAC_HandleTypeDef hdac;
 #endif
 
-typedef enum {
+typedef enum dacChannelStatus {
 	DAC_CHANNEL_STOP = 0, DAC_CHANNEL_RUN = 1,
 } dacChannelStatus;
 
 typedef struct analogOutputDef {
+	uint8_t is_initialized;
 	liner_fce voltage_to_raw_fce;
 	uint16_t raw_value;
 	uint32_t channel;
@@ -38,7 +39,7 @@ retStatus analog_output_init(anaOutputs an_output_name, uint32_t channel,
 		return ENODEV;
 	}
 
-	if (channel != DAC_CHANNEL_1 && channel != DAC_CHANNEL_2) {
+	if (!IS_DAC_CHANNEL(channel)) {
 		swo_print("ao: initialization with invalid DAC channel");
 		return ENODEV;
 	}
@@ -48,6 +49,7 @@ retStatus analog_output_init(anaOutputs an_output_name, uint32_t channel,
 		return EFAULT;
 	}
 
+	analog_outputs[an_output_name].is_initialized = 1;
 	analog_outputs[an_output_name].channel = channel;
 	analog_outputs[an_output_name].voltage_to_raw_fce = linear_fce;
 
@@ -58,7 +60,8 @@ retStatus analog_output_init(anaOutputs an_output_name, uint32_t channel,
 retStatus analog_output_set(uint16_t an_output_name, uint16_t data_type,
 		int32_t value) {
 
-	if (an_output_name >= AO_NONE) {
+	if (an_output_name >= AO_NONE
+			|| analog_outputs[an_output_name].is_initialized == 0) {
 		return ENODEV;
 	}
 
@@ -87,51 +90,48 @@ retStatus analog_output_set(uint16_t an_output_name, uint16_t data_type,
 
 void static _analog_output_set_voltage(anaOutputs an_output_name, int16_t value) {
 
-	//todo set voltage fce
+	struct analogOutputDef *output = &analog_outputs[an_output_name];
 
 	if (value == 0) {
-		_analog_output_stop_start_channel(an_output_name, 0);
-		analog_outputs[an_output_name].mx_voltage = 0;
-		analog_outputs[an_output_name].raw_value = 0;
-	}
+		_analog_output_stop_start_channel(an_output_name, DAC_CHANNEL_STOP);
+		output->mx_voltage = 0;
+		output->raw_value = 0;
+	} else {
+		_analog_output_stop_start_channel(an_output_name, DAC_CHANNEL_RUN);
+		if (output->voltage_to_raw_fce != NULL) {
+			uint32_t aux = output->voltage_to_raw_fce(value);
+#ifdef DAC
+			HAL_DAC_SetValue(&hdac, output->channel,
+			DAC_ALIGN_12B_R, (uint16_t) aux);
+#endif
+		} else {
+			swo_print("ao: null pointer in linearization function");
 
-//	else {
-//		_dac_stop_start_channel(an_output_name, 1);
-//		if (analog_outputs[an_output_name].voltage_to_raw_fce != NULL) {
-//			uint32_t aux = 0;
-//			if (analog_outputs[an_output_name].voltage_to_raw_fce != NULL) {
-//				aux = analog_outputs[an_output_name].voltage_to_raw_fce(value);
-//			} else {
-//				swo_print("ao: null pointer in linearization function");
-//				aux = 0;
-//			}
-//#ifdef LIB_AO
-//			HAL_DAC_SetValue(&hdac, analog_outputs[an_output_name].channel,
-//			DAC_ALIGN_12B_R, (uint16_t) aux);
-//#endif
-//		}
-//
-//	}
+		}
+
+	}
 
 }
 
 retStatus static _analog_output_stop_start_channel(anaOutputs an_output_name,
 		dacChannelStatus status) {
 
+	struct analogOutputDef *output = &analog_outputs[an_output_name];
+
 	if (status == DAC_CHANNEL_RUN) {
-		if (analog_outputs[an_output_name].channel_status == DAC_CHANNEL_STOP) {
-#ifdef LIB_AO
-			HAL_DAC_Start(&hdac, analog_outputs[an_output_name].channel);
+		if (output->channel_status == DAC_CHANNEL_STOP) {
+#ifdef DAC
+			HAL_DAC_Start(&hdac, output->channel);
 #endif
-			analog_outputs[an_output_name].channel_status = DAC_CHANNEL_RUN;
+			output->channel_status = DAC_CHANNEL_RUN;
 		}
 
 	} else if (status == DAC_CHANNEL_STOP) {
-		if (analog_outputs[an_output_name].channel_status == DAC_CHANNEL_RUN) {
-#ifdef LIB_AO
-			HAL_DAC_Stop(&hdac, analog_outputs[an_output_name].channel);
+		if (output->channel_status == DAC_CHANNEL_RUN) {
+#ifdef DAC
+			HAL_DAC_Stop(&hdac, output->channel);
 #endif
-			analog_outputs[an_output_name].channel_status = DAC_CHANNEL_STOP;
+			output->channel_status = DAC_CHANNEL_STOP;
 		}
 	} else {
 		return ENODEV;

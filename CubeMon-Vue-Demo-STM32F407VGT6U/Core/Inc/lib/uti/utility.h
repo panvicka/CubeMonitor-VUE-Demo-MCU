@@ -9,7 +9,8 @@
 #define INC_LIB_UTILITY_H_
 
 typedef enum {
-	EOK = 0, EPERM = 1, // Operation not permitted
+	EOK = 0, // operation OK
+	EPERM = 1, // Operation not permitted
 	EIO = 5, // IO error
 	ENXIO = 6,  // No such device or address
 	EACCES = 13, // Permission denied

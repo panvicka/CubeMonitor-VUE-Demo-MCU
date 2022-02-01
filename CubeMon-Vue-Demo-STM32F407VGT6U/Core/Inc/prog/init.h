@@ -8,6 +8,8 @@
 #ifndef INC_PROG_INIT_H_
 #define INC_PROG_INIT_H_
 
+
+
 void init(void);
 
 #define LIB_DI
