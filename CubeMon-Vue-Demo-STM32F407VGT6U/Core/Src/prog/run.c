@@ -24,6 +24,7 @@ void static prog_counter_handling(void);
 
 void prog_SM_tasks(void) {
 	prog_counter_handling();
+	calc_temp();
 }
 
 void prog_1s_tasks(void) {

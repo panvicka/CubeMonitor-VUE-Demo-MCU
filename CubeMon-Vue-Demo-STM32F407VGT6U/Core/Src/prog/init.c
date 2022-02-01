@@ -17,7 +17,7 @@ const uint16_t DI_DEBOUNC_MS = 50;
 const uint16_t DI_DOUBLE_PRESS_SPACING = 300;
 const uint16_t DI_LONG_PRESS_MIN_DURATION = 500;
 
-const uint16_t AI_SAMPLING = 100;
+const uint16_t AI_SAMPLING = 600;
 
 ADC_HandleTypeDef hadc1;
 

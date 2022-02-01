@@ -17,7 +17,7 @@
  */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include <main.h>
+#include "main.h"
 #include <prog/init.h>
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -113,14 +113,15 @@ int main(void) {
 	MX_TIM10_Init();
 	MX_TIM13_Init();
 	MX_TIM14_Init();
-//  MX_IWDG_Init();
+	// MX_IWDG_Init();
 	/* USER CODE BEGIN 2 */
 //	HAL_GPIO_WritePin(DIODE_DO_BLUE_GPIO_Port, DIODE_DO_BLUE_Pin, GPIO_PIN_SET);
 	init();
-	/* USER CODE END 2 */
 	HAL_TIM_Base_Start_IT(&htim10);
 	HAL_TIM_Base_Start_IT(&htim13);
 	HAL_TIM_Base_Start_IT(&htim14);
+	/* USER CODE END 2 */
+
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	while (1) {
@@ -193,17 +194,17 @@ static void MX_ADC1_Init(void) {
 	/** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
 	 */
 	hadc1.Instance = ADC1;
-	hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+	hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV8;
 	hadc1.Init.Resolution = ADC_RESOLUTION_12B;
 	hadc1.Init.ScanConvMode = ENABLE;
-	hadc1.Init.ContinuousConvMode = DISABLE;
+	hadc1.Init.ContinuousConvMode = ENABLE;
 	hadc1.Init.DiscontinuousConvMode = DISABLE;
 	hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
 	hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
 	hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-	hadc1.Init.NbrOfConversion = 2;
+	hadc1.Init.NbrOfConversion = 3;
 	hadc1.Init.DMAContinuousRequests = ENABLE;
-	hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+	hadc1.Init.EOCSelection = ADC_EOC_SEQ_CONV;
 	if (HAL_ADC_Init(&hadc1) != HAL_OK) {
 		Error_Handler();
 	}
@@ -217,7 +218,15 @@ static void MX_ADC1_Init(void) {
 	}
 	/** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
 	 */
+	sConfig.Channel = ADC_CHANNEL_2;
 	sConfig.Rank = 2;
+	if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK) {
+		Error_Handler();
+	}
+	/** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+	 */
+	sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
+	sConfig.Rank = 3;
 	if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK) {
 		Error_Handler();
 	}
@@ -308,11 +317,11 @@ static void MX_I2C1_Init(void) {
 //{
 //
 //  /* USER CODE BEGIN IWDG_Init 0 */
-//
+////
 //  /* USER CODE END IWDG_Init 0 */
 //
 //  /* USER CODE BEGIN IWDG_Init 1 */
-//
+////
 //  /* USER CODE END IWDG_Init 1 */
 //  hiwdg.Instance = IWDG;
 //  hiwdg.Init.Prescaler = IWDG_PRESCALER_4;
@@ -322,7 +331,7 @@ static void MX_I2C1_Init(void) {
 //    Error_Handler();
 //  }
 //  /* USER CODE BEGIN IWDG_Init 2 */
-//
+////
 //  /* USER CODE END IWDG_Init 2 */
 //
 //}

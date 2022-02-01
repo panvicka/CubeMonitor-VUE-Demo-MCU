@@ -84,6 +84,8 @@ retStatus analog_input_init(anaInputs an_input_name, int32_t sample_from,
 		return EINVAL;
 	}
 
+	input->is_initialized = 1;
+
 	return EOK;
 }
 
