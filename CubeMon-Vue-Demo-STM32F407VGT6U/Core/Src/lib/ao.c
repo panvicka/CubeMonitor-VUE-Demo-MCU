@@ -100,6 +100,8 @@ void static _analog_output_set_voltage(anaOutputs an_output_name, int16_t value)
 		_analog_output_stop_start_channel(an_output_name, DAC_CHANNEL_RUN);
 		if (output->voltage_to_raw_fce != NULL) {
 			uint32_t aux = output->voltage_to_raw_fce(value);
+			output->mx_voltage = value;
+			output->raw_value = aux;
 #ifdef DAC
 			HAL_DAC_SetValue(&hdac, output->channel,
 			DAC_ALIGN_12B_R, (uint16_t) aux);
@@ -143,7 +145,7 @@ retStatus static _analog_output_stop_start_channel(anaOutputs an_output_name,
 
 uint32_t lin_dac_no_scaling_no_corrections(uint32_t voltage_value) {
 
-	return voltage_value * 330 / 4094;
+	return voltage_value * 4094 / 330;
 
 }
 

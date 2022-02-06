@@ -36,6 +36,7 @@ retStatus output_init(digOutputs output_name,
 
 	struct digitalOutputDef *output = &outputs[output_name];
 
+	output->is_initialized = 1;
 	output->inits.pin = digital_output_init_data.pin;
 	output->inits.port = digital_output_init_data.port;
 	output->inits.init_state = digital_output_init_data.init_state;
@@ -52,7 +53,11 @@ retStatus output_toggle(digOutputs output_name) {
 		return ENODEV;
 	}
 
-	output_set_hw_HAL(output_name, !outputs[output_name].mx_state);
+	if ((GPIO_PinState) outputs[output_name].mx_state == GPIO_PIN_RESET) {
+		output_set_hw_HAL(output_name, GPIO_PIN_SET);
+	} else {
+		output_set_hw_HAL(output_name, GPIO_PIN_RESET);
+	}
 
 	return EOK;
 }
@@ -91,6 +96,7 @@ __weak retStatus output_set_hw_HAL(digOutputs output_name, GPIO_PinState state) 
 
 	struct digitalOutputDef *output = &outputs[output_name];
 
+	output->mx_state = state;
 	HAL_GPIO_WritePin(output->inits.port, output->inits.pin, state);
 	return EOK;
 

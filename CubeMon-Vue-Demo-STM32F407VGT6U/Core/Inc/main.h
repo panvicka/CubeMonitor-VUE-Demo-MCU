@@ -42,6 +42,7 @@ extern "C" {
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
 #define ALLOW_CUBEMX_OVERWRITE
+#define ALLOW_CUBEMX_BACKDOOR
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/

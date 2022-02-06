@@ -8,8 +8,6 @@
 #ifndef INC_PROG_INIT_H_
 #define INC_PROG_INIT_H_
 
-
-
 void init(void);
 
 #define LIB_DI
@@ -26,7 +24,7 @@ typedef enum {
 } digOutputs;
 
 typedef enum {
-	AI_1, AI_2, AI_TEMP, AI_NONE
+	AI_1, AI_2, AI_NONE
 } anaInputs;
 
 typedef enum {

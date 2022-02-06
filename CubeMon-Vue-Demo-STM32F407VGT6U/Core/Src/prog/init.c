@@ -100,8 +100,6 @@ void static _init_ai(void) {
 			lin_adc_no_scaling_no_corrections);
 	status += analog_input_init(AI_2, AI_SAMPLING,
 			lin_adc_no_scaling_no_corrections);
-	status += analog_input_init(AI_TEMP, AI_SAMPLING,
-			lin_adc_no_scaling_no_corrections);
 
 	status += HAL_ADC_Start_DMA(&hadc1, ADC_data_buffer, AI_NONE);
 
