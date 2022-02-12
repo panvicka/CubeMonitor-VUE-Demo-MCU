@@ -188,6 +188,9 @@ retStatus input_init(digInputs input_name,
 	input->last_confirmed_hw_state = input->inits.input_get_hw_state(
 			input_name);
 
+	input->mx_logical_state = _input_get_logical_value(input,
+			input->last_confirmed_hw_state);
+
 	if (input->last_confirmed_hw_state == input->off_state) {
 		input->actions[INPUT_ACT_RISING_EDGE].detectable = 1;
 	} else {
@@ -200,24 +203,24 @@ retStatus input_init(digInputs input_name,
 
 }
 
-dioStates input_state_debounced(digInputs input_name) {
+dioStates input_logical_state_debounced(digInputs input_name) {
 	if (input_name >= DI_NONE || inputs[input_name].is_initialized == 0) {
-		return !inputs[input_name].mx_logical_state;
-	} else {
 		return ENODEV;
+	} else {
+		return inputs[input_name].mx_logical_state;
 	}
 }
 
 dioStates input_state_now(digInputs input_name) {
 	if (input_name >= DI_NONE || inputs[input_name].is_initialized == 0) {
-		return inputs[input_name].inits.input_get_hw_state(input_name);
-	} else {
 		return ENODEV;
+	} else {
+		return inputs[input_name].inits.input_get_hw_state(input_name);
 	}
 }
 
 void input_handle(void) {
-	for (uint8_t i = 0; i < DI_NONE - 1; i++) {
+	for (uint8_t i = 0; i < DI_NONE; i++) {
 		if (inputs[i].is_initialized == 1) {
 			_input_debounc(&inputs[i], inputs[i].inits.input_get_hw_state(i));
 		}

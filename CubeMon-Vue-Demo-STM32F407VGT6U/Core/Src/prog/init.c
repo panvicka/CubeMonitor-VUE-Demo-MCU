@@ -56,7 +56,7 @@ void static _init_di(void) {
 	digital_input_init.mcu_pin = DI_1_Pin;
 	digital_input_init.mcu_port = DI_1_GPIO_Port;
 	digital_input_init.sw_type = INPUT_SW_ON_OFF_INPUT;
-	digital_input_init.hw_type = INPUT_HW_ACTIVE_LOW;
+	digital_input_init.hw_type = INPUT_HW_ACTIVE_HIGH;
 	status += input_init(DI_1, digital_input_init);
 
 	digital_input_init.mcu_pin = DI_2_Pin;

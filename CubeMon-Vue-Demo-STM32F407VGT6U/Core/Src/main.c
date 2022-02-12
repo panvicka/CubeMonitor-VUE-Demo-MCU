@@ -519,7 +519,13 @@ static void MX_GPIO_Init(void) {
 	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 	/*Configure GPIO pins : DI_1_Pin DI_2_Pin */
-	GPIO_InitStruct.Pin = DI_1_Pin | DI_2_Pin;
+	GPIO_InitStruct.Pin = DI_1_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+	HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
+	/*Configure GPIO pins : DI_1_Pin DI_2_Pin */
+	GPIO_InitStruct.Pin = DI_2_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);

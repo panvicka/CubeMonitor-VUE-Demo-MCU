@@ -31,13 +31,15 @@ typedef struct programData {
 static programData data;
 
 void static prog_handle_counter(void);
-void static prog_handle_output_setting(void);
+void static prog_handle_blue_led(void);
 void static prog_handle_adc_dac(void);
+void static prog_handle_orange_led(void);
 
 void prog_SM_tasks(void) {
 	prog_handle_counter();
-	prog_handle_output_setting();
+	prog_handle_blue_led();
 	prog_handle_adc_dac();
+	prog_handle_orange_led();
 
 #ifdef ALLOW_CUBEMX_BACKDOOR
 	back_door_handle();
@@ -48,7 +50,6 @@ void prog_1s_tasks(void) {
 	data.mx_operation_time_in_seconds++;
 
 	output_toggle(DO_LED_ORANGE);
-	output_toggle(DO_LED_RED);
 
 	if (data.increase_counter_every_1s == 1) {
 		data.mx_counter++;
@@ -67,8 +68,7 @@ void prog_1ms_tasks(void) {
 	input_handle();
 }
 
-
-void static prog_handle_output_setting(void) {
+void static prog_handle_blue_led(void) {
 	if (data.mx_counter % 2) {
 		output_set(DO_LED_BLUE, GPIO_PIN_SET);
 	} else {
@@ -100,6 +100,15 @@ void static prog_handle_counter(void) {
 		data.increase_counter_every_1s = 1;
 	} else {
 		data.increase_counter_every_1s = 0;
+	}
+}
+
+void static prog_handle_orange_led(void) {
+	if (input_logical_state_debounced(DI_1) == DIO_ON
+			&& input_logical_state_debounced(DI_2) == DIO_ON) {
+		output_set(DO_LED_RED, GPIO_PIN_SET);
+	} else {
+		output_set(DO_LED_RED, GPIO_PIN_RESET);
 	}
 }
 

@@ -151,7 +151,7 @@ uint8_t input_is_short_press(digInputs input_name);
 uint8_t input_is_long_press(digInputs input_name);
 
 dioStates input_state_now(digInputs input_name);
-dioStates input_state_debounced(digInputs input_name);
+dioStates input_logical_state_debounced(digInputs input_name);
 
 void input_handle(void);
 
