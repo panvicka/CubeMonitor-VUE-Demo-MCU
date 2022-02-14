@@ -19,3 +19,8 @@ Debug/Drivers
 Debug/Src
 Debug/startup
 Debug
+
+
+# generated documentation 
+html
+latex
