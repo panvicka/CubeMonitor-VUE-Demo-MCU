@@ -1,8 +1,8 @@
-/*
- * do.c
- *
- *  Created on: Jan 8, 2022
- *      Author: panvicka
+/**
+ * @file do.c
+ * @author panvicka
+ * @date 8.1.2022
+ * @brief digital outputs with set/get and toggle functions
  */
 
 #include <lib/do.h>

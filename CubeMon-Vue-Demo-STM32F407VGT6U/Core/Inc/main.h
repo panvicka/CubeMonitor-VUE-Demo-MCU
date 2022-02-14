@@ -41,8 +41,7 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-#define ALLOW_CUBEMX_OVERWRITE
-#define ALLOW_CUBEMX_BACKDOOR
+
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
@@ -56,7 +55,7 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-#define LIB_DI
+
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
@@ -79,7 +78,10 @@ void Error_Handler(void);
 #define DIODE_DO_BLUE_Pin GPIO_PIN_15
 #define DIODE_DO_BLUE_GPIO_Port GPIOD
 /* USER CODE BEGIN Private defines */
+#define ALLOW_CUBEMX_OVERWRITE
+#define ALLOW_CUBEMX_BACKDOOR
 
+#define USE_WATCHDOG
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

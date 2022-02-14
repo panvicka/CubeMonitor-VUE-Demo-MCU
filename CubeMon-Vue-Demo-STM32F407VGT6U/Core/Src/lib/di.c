@@ -24,24 +24,34 @@ typedef struct digitalInputAction {
 
 typedef struct digitalInputDef {
 
-	uint8_t is_initialized;
+	uint8_t is_initialized; ///< set to 1 after successful initialization
 
-	uint8_t mx_logical_state;
-	uint8_t mx_rewrites;
-	uint8_t mx_value;
+	uint8_t mx_logical_state; ///< debounced logical state of the input
+	uint8_t mx_rewrites; ///< helper variable for CubeMonitor
+	uint8_t mx_value; ///< helper variable for CubeMonitor
 
-	uint8_t double_press_monitoring;
-	uint16_t double_press_counter;
+	uint8_t double_press_monitoring; ///< helper variable for double press detection
+	uint16_t double_press_counter; ///< helper variable for double press detection
 
-	uint16_t counter;
+	digitalInputSM state; ///< holds state for state machine evaluating the input actions
+	GPIO_PinState last_confirmed_hw_state; ///< help variable for input debouncing
+	uint16_t counter; ///< help variable for input debouncing
 
+	/*!< based on the initialization data, saves the HW
+	 * state at which is the input considered on
+	 * @note it is possible to evaluate this from the \ref inits structure, but this makes the code readable
+	 */
 	GPIO_PinState on_state;
 	GPIO_PinState off_state;
-	GPIO_PinState last_confirmed_hw_state;
+	/*!< based on the initialization data, saves the HW
+	 * state at which is the input considered off
+	 * @note it is possible to evaluate this from the \ref inits structure, but this makes the code readable
+	 *
+	 */
 
-	digitalInputInitData inits;
-	digitalInputSM state;
-	digitalInputAction actions[INPUT_ACT_NONE];
+	digitalInputInitData inits; ///< initialization data
+
+	digitalInputAction actions[INPUT_ACT_NONE]; /*!< keep track of the input actions */
 
 } digitalInputDef;
 

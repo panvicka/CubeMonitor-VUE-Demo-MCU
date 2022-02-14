@@ -1,8 +1,9 @@
-/*
- * ai.c
+/**
+ * @file ai.c
+ * @author panvicka
+ * @date 8.1.2022
+ * @brief analog inputs library for multi-channel DMA running in interrupt mode, averaging and custom linearization functions
  *
- *  Created on: Jan 8, 2022
- *      Author: panvicka
  */
 
 #include <main.h>
@@ -11,19 +12,20 @@
 #include <lib/uti/swo.h>
 
 typedef struct analogInput {
-	uint8_t is_initialized;
+	uint8_t is_initialized; ///< set to 1 after successful initialization
 
-	uint32_t total;
-	uint16_t count;
-	uint16_t averaged_12b;
-	uint16_t current_12b;
+	uint32_t total; ///< helper variable for calculation of the average value
+	uint16_t count; ///< helper variable for calculation of the average value
+	uint16_t averaged_12b; ///< averaged value on ADC
+	uint16_t current_12b; ///< current value on ADC
 
-	uint16_t samples_to_average;
+	uint16_t samples_to_average; ///< defined how many samples are to be averaged
 
-	uint16_t mx_voltage;
-	uint8_t mx_rewrites;
-	uint16_t mx_value;
-	liner_fce liner_fce;
+	uint16_t mx_voltage; ///< voltage on the analog input, calculated with \ref analogInput.liner_fce
+	uint8_t mx_rewrites;  ///< helper variable for CubeMonitor
+	uint16_t mx_value;  ///< helper variable for CubeMonitor
+
+	liner_fce liner_fce; ///< function for calculation of \ref mx_voltage from \ref averaged_12b
 } analogInput;
 
 static analogInput analog_inputs[AI_NONE];

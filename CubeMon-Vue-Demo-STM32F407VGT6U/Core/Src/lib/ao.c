@@ -1,8 +1,8 @@
-/*
- * ao.c
- *
- *  Created on: Jan 8, 2022
- *      Author: panvicka
+/**
+ * @file ao.c
+ * @author panvicka
+ * @date 8.1.2022
+ * @brief analog output library
  */
 
 #include <lib/ao.h>

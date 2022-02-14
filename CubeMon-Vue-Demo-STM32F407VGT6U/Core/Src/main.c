@@ -68,7 +68,9 @@ static void MX_TIM4_Init(void);
 static void MX_TIM10_Init(void);
 static void MX_TIM13_Init(void);
 static void MX_TIM14_Init(void);
-//static void MX_IWDG_Init(void);
+#ifdef USE_WATCHDOG
+static void MX_IWDG_Init(void);
+#endif
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -113,9 +115,11 @@ int main(void) {
 	MX_TIM10_Init();
 	MX_TIM13_Init();
 	MX_TIM14_Init();
-	// MX_IWDG_Init();
+#ifdef USE_WATCHDOG
+	 MX_IWDG_Init();
+#endif
 	/* USER CODE BEGIN 2 */
-//	HAL_GPIO_WritePin(DIODE_DO_BLUE_GPIO_Port, DIODE_DO_BLUE_Pin, GPIO_PIN_SET);
+
 	init();
 	HAL_TIM_Base_Start_IT(&htim10);
 	HAL_TIM_Base_Start_IT(&htim13);
@@ -125,6 +129,9 @@ int main(void) {
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	while (1) {
+#ifdef USE_WATCHDOG
+		HAL_IWDG_Refresh(&hiwdg);
+#endif
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */
@@ -313,28 +320,28 @@ static void MX_I2C1_Init(void) {
  * @param None
  * @retval None
  */
-//static void MX_IWDG_Init(void)
-//{
-//
-//  /* USER CODE BEGIN IWDG_Init 0 */
-////
-//  /* USER CODE END IWDG_Init 0 */
-//
-//  /* USER CODE BEGIN IWDG_Init 1 */
-////
-//  /* USER CODE END IWDG_Init 1 */
-//  hiwdg.Instance = IWDG;
-//  hiwdg.Init.Prescaler = IWDG_PRESCALER_4;
-//  hiwdg.Init.Reload = 4095;
-//  if (HAL_IWDG_Init(&hiwdg) != HAL_OK)
-//  {
-//    Error_Handler();
-//  }
-//  /* USER CODE BEGIN IWDG_Init 2 */
-////
-//  /* USER CODE END IWDG_Init 2 */
-//
-//}
+#ifdef USE_WATCHDOG
+static void MX_IWDG_Init(void) {
+
+	/* USER CODE BEGIN IWDG_Init 0 */
+
+	/* USER CODE END IWDG_Init 0 */
+
+	/* USER CODE BEGIN IWDG_Init 1 */
+
+	/* USER CODE END IWDG_Init 1 */
+	hiwdg.Instance = IWDG;
+	hiwdg.Init.Prescaler = IWDG_PRESCALER_4;
+	hiwdg.Init.Reload = 4095;
+	if (HAL_IWDG_Init(&hiwdg) != HAL_OK) {
+		Error_Handler();
+	}
+	/* USER CODE BEGIN IWDG_Init 2 */
+
+	/* USER CODE END IWDG_Init 2 */
+
+}
+#endif
 /**
  * @brief TIM4 Initialization Function
  * @param None

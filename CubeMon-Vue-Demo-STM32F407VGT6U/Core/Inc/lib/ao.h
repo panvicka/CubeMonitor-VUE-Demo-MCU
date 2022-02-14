@@ -1,8 +1,21 @@
-/*
- * ao.h
+/**
+ * @file ao.h
+ * @author panvicka
+ * @date 8.1.2022
+ * @brief analog output library
  *
- *  Created on: Jan 8, 2022
- *      Author: panvicka
+ * To use this library define flag LIB_AO in the lib_config.h file and create an enum in init.h file
+ * with the outputs you would like to use.
+ * You then have to initialize each input with \ref input_init function.
+ * @code
+ *	typedef enum anaOutputs {
+ *	MY_ANALOG_OUTPUT_1,
+ *	MY_ANALOG_OUTPUT_2,
+ *	MY_ANALOG_OUTPUT_3,
+ *	AO_NONE
+ *	} anaOutputs;
+ * @endcode
+ * @note Do not forget to include the AO_NONE at the end of the enum listing.
  */
 
 #ifndef INC_LIB_AO_H_
@@ -15,7 +28,11 @@
 #ifdef LIB_AO
 #include <prog/init.h>
 #else
-typedef enum {
+/**
+ * If the library is not used (@b LIB_AO is not defined as symbol) this dummy enum will be created
+ * to prevent compilation errors
+ */
+typedef enum anaOutputs {
 	AO_NONE
 }anaOutputs;
 #endif

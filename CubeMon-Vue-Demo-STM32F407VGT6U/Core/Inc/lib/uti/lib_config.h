@@ -1,8 +1,9 @@
-/*
- * lib_config.h
+/**
+ * @file lib_config.h
+ * @author panvicka
+ * @date 2.1.2022
+ * @brief Defines for turning on/off the library modules
  *
- *  Created on: 10.01.2022
- *      Author: e.veisova
  */
 
 #ifndef INC_LIB_UTI_LIB_CONFIG_H_
