@@ -12,7 +12,8 @@
  *
  * To use this library define flag LIB_DI in the lib_config.h file and create an enum in init.h file
  * with the inputs you would like to use.
- * You then have to initialize each input with \ref input_init function.
+ * You then have to initialize each input with @see input_init function.
+ *
  * @code
  *	typedef enum {
  *	MY_INPUT_1,
@@ -114,14 +115,14 @@ typedef enum digitalInputDateTypes {
 	INPUT_DAT_FALLING_EDGE,
 
 	/** \brief input short press status
-	 * read status with \ref input_get, clean only the short press status with \ref input_set and value "0"
+	 * read status with /ref input_get, clean only the short press status with /ref input_set and value "0"
 	 * it must be cleaned:
 	 * with /ref input_set function and set value "0"
 	 * or with /ref input_ack_action with argument /ref INPUT_ACT_SHORT_PRESS */
 	INPUT_DAT_SHORT_PRESS,
 
 	/** \brief input long press status
-	 * read status with \ref input_get, clean only the long press status with \ref input_set and value "0"
+	 * read status with /ref input_get, clean only the long press status with /ref input_set and value "0"
 	 * it must be cleaned:
 	 * with /ref input_set function and set value "0"
 	 * or with /ref input_ack_action with argument /ref INPUT_ACT_LONG_PRESS */
