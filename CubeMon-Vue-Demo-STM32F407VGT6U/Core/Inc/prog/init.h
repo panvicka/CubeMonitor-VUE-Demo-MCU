@@ -1,8 +1,8 @@
-/*
- * init.h
- *
- *  Created on: Jan 8, 2022
- *      Author: panvicka
+/**
+ * @file init.h
+ * @author panvicka
+ * @date 2.1.2022
+ * @brief Initialization of digital/analog inputs and outputs.
  */
 
 #ifndef INC_PROG_INIT_H_

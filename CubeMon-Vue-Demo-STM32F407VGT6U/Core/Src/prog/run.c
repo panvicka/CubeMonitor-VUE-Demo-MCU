@@ -1,8 +1,9 @@
-/*
- * run.c
+/**
+ * @file run.c
+ * @author panvicka
+ * @date 2.1.2022
+ * @brief Programm logic.
  *
- *  Created on: Jan 8, 2022
- *      Author: panvicka
  */
 
 #include <lib/ai.h>
@@ -19,12 +20,19 @@
 
 typedef struct programData {
 
+	/** Counter variable is increased by one with a short press of the user button, will increase by 1
+	 * every second if a long press is detected and will be set to 0 with double press
+	 */
 	uint32_t mx_counter;
-	uint8_t mx_counter_rewrites;
-	uint16_t mx_counter_value;
+	uint8_t mx_counter_rewrites; ///> helper variables for Cube Monitor
+	uint16_t mx_counter_value; ///> helper variables for Cube Monitor
 
+	/** program "uptime" counter, increases by 1 every second, in the Cube Monitor it is used as indicator that
+	 * a connection to MCU is active
+	 */
 	uint32_t mx_operation_time_in_seconds;
-	uint8_t increase_counter_every_1s;
+
+	uint8_t increase_counter_every_1s; ///> helper variable deciding if the programData.mx_counter should be increased every second or not
 
 } programData;
 
@@ -76,6 +84,10 @@ void static prog_handle_blue_led(void) {
 	}
 }
 
+
+/**
+ * @brief
+ */
 void static prog_handle_adc_dac(void) {
 	int32_t voltage = 0;
 	analog_input_get(AI_1, ANA_DIO_VOLTAGE, &voltage);

@@ -1,8 +1,8 @@
-/*
- * callbacks.c
- *
- *  Created on: Jan 8, 2022
- *      Author: panvicka
+/**
+ * @file callbacks.c
+ * @author panvicka
+ * @date 2.1.2022
+ * @brief HAL library callbacks
  */
 
 #include <prog/callbacks.h>

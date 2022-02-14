@@ -1,8 +1,8 @@
-/*
- * init.c
- *
- *  Created on: Jan 8, 2022
- *      Author: panvicka
+/**
+ * @file init.c
+ * @author panvicka
+ * @date 2.1.2022
+ * @brief Initialization of digital/analog inputs and outputs.
  */
 
 #include <lib/di.h>

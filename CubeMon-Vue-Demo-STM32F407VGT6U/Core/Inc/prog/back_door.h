@@ -1,8 +1,8 @@
-/*
- * back_door.h
- *
- *  Created on: Feb 6, 2022
- *      Author: panvicka
+/**
+ * @file back_door.h
+ * @author panvicka
+ * @date 2.1.2022
+ * @brief Secret backdoor to your project allowing direct system manipulation (close it before building for production!)
  */
 
 #ifndef INC_PROG_BACK_DOOR_H_

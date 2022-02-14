@@ -1,8 +1,8 @@
-/*
- * run.h
- *
- *  Created on: Jan 8, 2022
- *      Author: panvicka
+/**
+ * @file run.h
+ * @author panvicka
+ * @date 2.1.2022
+ * @brief Programm logic.
  */
 
 #ifndef INC_PROG_RUN_H_

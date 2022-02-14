@@ -1,8 +1,8 @@
-/*
- * back_door.c
- *
- *  Created on: Feb 6, 2022
- *      Author: panvicka
+/**
+ * @file back_door.c
+ * @author panvicka
+ * @date 2.1.2022
+ * @brief Secret backdoor to your project allowing direct system manipulation (close it before building for production!)
  */
 
 #include <prog/back_door.h>
@@ -24,13 +24,16 @@ void back_door_handle(void) {
 		switch (mx_back_door) {
 
 		case BCK_DOOR_WHILE_LOOP:
+			// checks if the watchdog is a good boy
 			while (1)
 				;
 			break;
 		case BCK_DOOR_NVIC_RESET:
+			// testing how good can the system recover from system reset
 			HAL_NVIC_SystemReset();
 			break;
 		case BCK_DOOR_RESET_ALL:
+			// sets all varibles to zero
 			prog_reset_all();
 			break;
 		default:
@@ -38,4 +41,5 @@ void back_door_handle(void) {
 		}
 		mx_back_door = BCK_DOOR_NONE;
 	}
+
 }
