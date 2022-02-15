@@ -6,14 +6,17 @@
  *
  */
 
-
 #ifndef INC_LIB_UTI_HW_HAL_INCLUDES_H_
 #define INC_LIB_UTI_HW_HAL_INCLUDES_H_
 
-#define STM32F407
+#define STM32F4
 
-#ifdef STM32F407
+#if defined (STM32F4)
 #include <stm32f4xx_hal.h>
+#elif defined (STM32F1)
+#include <stm32f1xx_hal.h>
+#elif defined (STM32F0)
+#include <stm32f0xx_hal.h>
 #else
 #error "Select one of the MCUs!"
 #endif

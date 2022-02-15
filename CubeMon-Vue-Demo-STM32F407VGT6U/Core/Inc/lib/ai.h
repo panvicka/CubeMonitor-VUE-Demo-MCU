@@ -73,6 +73,13 @@ retStatus analog_input_get(uint16_t analog_input, uint16_t data, int32_t *value)
 void analog_input_handle(void);
 
 /**
+ * @brief Starts the ADC with DMA in interrupt mode using STM32 HAL
+ * @param[in] adc active ADC
+ * @return HAL status
+ */
+__weak HAL_StatusTypeDef analog_input_start(ADC_HandleTypeDef adc);
+
+/**
  * @brief Convert ADC reading to voltage for a simple 0-3.3V input
  */
 uint32_t lin_adc_no_scaling_no_corrections(uint32_t adc_value);

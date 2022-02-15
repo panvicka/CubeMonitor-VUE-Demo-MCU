@@ -136,6 +136,11 @@ void analog_input_handle(void) {
 	}
 }
 
+__weak HAL_StatusTypeDef analog_input_start(ADC_HandleTypeDef adc) {
+
+	return HAL_ADC_Start_DMA(&adc, ADC_data_buffer, AI_NONE);
+}
+
 uint32_t lin_adc_no_scaling_no_corrections(uint32_t adc_value) {
 	return adc_value * 330 / 4094;
 }
