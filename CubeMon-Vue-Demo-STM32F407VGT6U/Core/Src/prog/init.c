@@ -22,20 +22,20 @@ const uint16_t AI_SAMPLING_AI2 = 2000;
 
 ADC_HandleTypeDef hadc1;
 
-retStatus static _init_di(void);
-retStatus static _init_do(void);
-retStatus static _init_ai(void);
-retStatus static _init_ao(void);
+retStatus static init_di(void);
+retStatus static init_do(void);
+retStatus static init_ai(void);
+retStatus static init_ao(void);
 
 void init(void) {
 
 	swo_init(SWO_PLAIN_MESSAGES);
 
 	retStatus status = EOK;
-	status += _init_di();
-	status += _init_do();
-	status += _init_ai();
-	status += _init_ao();
+	status += init_di();
+	status += init_do();
+	status += init_ai();
+	status += init_ao();
 
 	// in case any of the initialization fails, the program will stop
 	// check SWO messages for the cause
@@ -45,7 +45,7 @@ void init(void) {
 
 }
 
-retStatus static _init_di(void) {
+retStatus static init_di(void) {
 	retStatus status = EOK;
 
 	// initialization values that are valid for all inputs
@@ -102,7 +102,7 @@ retStatus static _init_di(void) {
 	return status;
 }
 
-retStatus static _init_do(void) {
+retStatus static init_do(void) {
 	retStatus status = EOK;
 
 	digitalOutputInitData digital_output_init;
@@ -124,7 +124,11 @@ retStatus static _init_do(void) {
 
 }
 
-retStatus static _init_ai(void) {
+uint32_t static lin_adc_5V_scaling_and_linearization(uint32_t adc) {
+	return adc * 500 / 4094;
+}
+
+retStatus static init_ai(void) {
 	retStatus status = EOK;
 
 	/*
@@ -141,7 +145,7 @@ retStatus static _init_ai(void) {
 	 * to the init function
 	 */
 	status += analog_input_init(AI_2, AI_SAMPLING_AI2,
-			lin_adc_no_scaling_no_corrections);
+			lin_adc_5V_scaling_and_linearization);
 
 	// Starts the conversion in DMA interrupt mode
 	status += analog_input_start(hadc1);
@@ -150,7 +154,7 @@ retStatus static _init_ai(void) {
 
 }
 
-retStatus static _init_ao(void) {
+retStatus static init_ao(void) {
 	retStatus status = EOK;
 
 	status += analog_output_init(AO_1, DAC_CHANNEL_1,
@@ -161,3 +165,4 @@ retStatus static _init_ao(void) {
 	return status;
 
 }
+

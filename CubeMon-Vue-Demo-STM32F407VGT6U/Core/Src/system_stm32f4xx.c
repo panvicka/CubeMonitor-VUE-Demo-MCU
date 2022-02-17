@@ -33,15 +33,15 @@
   ******************************************************************************
   */
 
-/** @addtogroup CMSIS
+/** @  CMSIS
   * @{
   */
 
-/** @addtogroup stm32f4xx_system
+/** @  stm32f4xx_system
   * @{
   */  
   
-/** @addtogroup STM32F4xx_System_Private_Includes
+/** @  STM32F4xx_System_Private_Includes
   * @{
   */
 
@@ -60,7 +60,7 @@
   * @}
   */
 
-/** @addtogroup STM32F4xx_System_Private_TypesDefinitions
+/** @  STM32F4xx_System_Private_TypesDefinitions
   * @{
   */
 
@@ -68,7 +68,7 @@
   * @}
   */
 
-/** @addtogroup STM32F4xx_System_Private_Defines
+/** @  STM32F4xx_System_Private_Defines
   * @{
   */
 
@@ -116,7 +116,7 @@
   * @}
   */
 
-/** @addtogroup STM32F4xx_System_Private_Macros
+/** @  STM32F4xx_System_Private_Macros
   * @{
   */
 
@@ -124,7 +124,7 @@
   * @}
   */
 
-/** @addtogroup STM32F4xx_System_Private_Variables
+/** @  STM32F4xx_System_Private_Variables
   * @{
   */
   /* This variable is updated in three ways:
@@ -142,7 +142,7 @@ const uint8_t APBPrescTable[8]  = {0, 0, 0, 0, 1, 2, 3, 4};
   * @}
   */
 
-/** @addtogroup STM32F4xx_System_Private_FunctionPrototypes
+/** @  STM32F4xx_System_Private_FunctionPrototypes
   * @{
   */
 
@@ -154,7 +154,7 @@ const uint8_t APBPrescTable[8]  = {0, 0, 0, 0, 1, 2, 3, 4};
   * @}
   */
 
-/** @addtogroup STM32F4xx_System_Private_Functions
+/** @  STM32F4xx_System_Private_Functions
   * @{
   */
 

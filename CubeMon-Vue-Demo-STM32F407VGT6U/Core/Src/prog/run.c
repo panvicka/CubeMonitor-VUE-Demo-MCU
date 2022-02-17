@@ -84,10 +84,6 @@ void static prog_handle_blue_led(void) {
 	}
 }
 
-
-/**
- * @brief
- */
 void static prog_handle_adc_dac(void) {
 	int32_t voltage = 0;
 	analog_input_get(AI_1, ANA_DIO_VOLTAGE, &voltage);
