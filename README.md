@@ -1,37 +1,82 @@
-# CubeMonitor+Vue Demo (MCU programm part)
-============
+# CubeMonitor+Vue Demo (MCU program part)
 
-Demonstration video: 
- 
-This project is a part of a larger project *CubeMonitor+Vue Demo*. This part contains the code for MCU created with HAL libraries, in this for STM32F407 evaluation board. In case you do not have STM32F407 evaluation board, you can port the program to any STM32 MCU as the Cube Monitor only cares about variable names/addresses. 
+This project is a part of a larger project *CubeMonitor+Vue Demo*. This part contains the code for MCU created with HAL libraries, in this for STM32F407 evaluation board (code is quite portable if you do not have exactly this board).
 
-## Motivation for creating CubeMonitor+Vue Demo
-The CubeMonitor tool enables program runtime monitoring using NodeRed. With the NodeRed 'function-block-like' programming and preconfigured elements (like LEDs for input status or dial for analog input and even a *write* table for variable setting) you can create simple dashboards. As long as you want only few inputs and you do not really care about setting a lot of variables manually, this is completely fine.  
+Check this [project github page](https://panvicka.github.io/CubeMonitor-VUE-Demo-MCU/) for more info and Doxygen build documentation.
 
-I did not really like the dashboard (it got pretty full and laggy after a while) and the way how it is created (I guess a lot of C/C++ programmers somehow dislike visual programing and wiring function blocks with mouse). I was also missing a simple way how to set variables using graphical elements like toggle switching. 
+Check the [UI Vue part](https://github.com/panvicka/CubeMonitor-VUE-Demo-CM) for integration with CubeMonitor 
 
-That is why I decided to use the NodeRed ui-builder plugin to create a custom UI with all the inputs/outputs/information I want. 
-
-
-## About this part 
-
-### Setup
+## Setup to use with the VUE interface 
 You will need: 
 	- STM32F407 Discovery board or any other evaluation board 
 	- STM IDE (turns out the Atollic and STM IDE are not really back-compatible, the configuration is broken...) 
 	
 Steps:
-	1) Fork and clone this repository 
-	2) Import the project into STM IDE 
-	3) The project setting should be imported as well but just to be sure this is the build command used: 
-		`` 
-	4) Build and flash the Discovery board with the code 
-	5) Continue with the second part setup: 
+1) Fork and clone this repository 
+2) Import the project into STM IDE 
+3) (if you have the STM32F407 Discovery board) flash it with the `program_VX.X.hex` from the  *Release* folder 
+3) (build yourself for a different MCU) The project setting should be imported as well but just to be sure this is the build command used: 
+```
+-mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb
+```
+5) Continue with the [VUE part setup](https://panvicka.github.io/CubeMonitor-VUE-Demo-CM/)
 	
-### Structure
-There are two main parts of the program
-	- lib 
-		- contains libraries for manipulation of the digital and analog inputs/outputs 
-	- prog 
-		- uses the libraries from *lib* to initialize used peripherials in init.c file 
-		- handles the program logic created to demonstrate the CubeMonitor+Vue Demo functionality 
+
+## Libraries usage
+This project was created to demonstrate the possibilities of the CubeMonitor Vue UI, but it also contains libraries that can be used separately. 
+
+
+### Digital input 
+0) make sure to define your HW correctly, if you are not using STM HAL, redefine the weak function `input_get_hw_HAL`
+1) define symbol `LIB_DI` 
+2) create an enum listing all inputs you would like to use, do not forget to include one extra named `DI_NONE`
+```c
+typedef enum digInputs {
+	YOUR_INPUT_1,
+	YOUR_INPUT_2,
+	DI_NONE,
+}digInputs;
+```
+3) initialize your inputs using `input_init` and `digitalInputInitData` structure. Check the [documentation](https://panvicka.github.io/CubeMonitor-VUE-Demo-MCU/di_8h.html) for more info on the types. 
+```c
+digitalInputInitData digital_input_init;
+digital_input_init.debounc_time = DI_DEBOUNC_MS;
+digital_input_init.double_press_spacing = DI_DOUBLE_PRESS_SPACING;
+digital_input_init.long_press_ms = DI_LONG_PRESS_MIN_DURATION;
+digital_input_init.input_get_hw_state = NULL;
+digital_input_init.mcu_pin = BUTTON_Pin;
+digital_input_init.mcu_port = BUTTON_GPIO_Port;
+digital_input_init.sw_type = INPUT_SW_BUTTON;
+digital_input_init.hw_type = INPUT_HW_ACTIVE_HIGH;
+input_init(DI_BUTTON, digital_input_init);
+
+```
+4) call the `input_handle` every 1ms 
+5) then you can use `input_get_action` to fetch input actions:
+```c
+INPUT_ACT_FALLING_EDGE
+INPUT_ACT_RISING_EDGE
+INPUT_ACT_SHORT_PRESS
+INPUT_ACT_LONG_PRESS
+INPUT_ACT_DOUBLE_PRESS
+```
+
+### Analog input 
+0) make sure to define your HW correctly
+1) define symbol `LIB_AI` 
+2) create an enum listing all analog inputs you would like to use, do not forget to include one extra named `AI_NONE`
+```c
+typedef enum anaInputs {
+	YOUR_ANALOG_INPUT_1,
+	YOUR_ANALOG_INPUT_2,
+	AI_NONE
+}anaInputs;
+```
+3) initialize your inputs using `analog_input_init` Check the [documentation](https://panvicka.github.io/CubeMonitor-VUE-Demo-MCU/ai_8h.html) for more info on the types. 
+```
+analog_input_init(AI_1, AI_SAMPLING_AI1,
+			lin_adc_no_scaling_no_corrections);
+```
+4) call `analog_input_start`
+5) place `analog_input_handle` into `HAL_ADC_ConvCpltCallback` 
+6) fetch current value, averaged current value or directly scaled voltage with `analog_input_get` 
